@@ -1,24 +1,40 @@
 %% Problem dynamiki w przestrzeni fazowej
 clear variables;
 %% konstruowanie macierzy o zadanym widmie
-lambda = [1 0.1];
+l1 = 0.7;
+l2 = -0.3;
+v1 = [1, -1]';
+v2 = [-3, 2]';
 
-A = [lambda(1) 0; 0 lambda(2)] *[cos(theta), -sin(theta); sin(theta), cos(theta)]*6.8;
+v1scaled = v1./sqrt(sum(v1'*v1));
+v2scaled = v2./sqrt(sum(v2'*v2));
 
-eig(A)/max(eig(A))
+X = [v1, v2];
+D = [l1, 0; 0, l2];
+
+A = X*[l1 0; 0 l2]*(X^-1);
+
 f = @(x) A*x;
 
 %% konstruowanie zbioru punktow X0 rozlozonych na okregu 
-R = 0.1;
+R = 1;
 X0 = R*exp(1i * (0:pi/4:2*pi)); X0 = [real(X0); imag(X0)];
 T0 = length(X0);
 
 %% obliczanie trajektorii ukladu dla wybranych punktow poczatkowych
-T = 3;
+T = 2;
 for i=1:T0
     x(:, 1+(i-1)*T) = X0(:, i);
     for t = 1:T, x(:, t+1 + (i-1)*T) = f(x(:, t + (i-1)*T)); end
 end
+
+%% obliczanie wartosci i wektorow wlasnych macierzy A
+[V, D] = eig(A)
+veig1 = V(:,1);
+veig2 = V(:,2);
+
+veig1scaled = veig1./sum(veig1'*veig1);
+vieg2scaled = veig2./sum(veig2'*veig2);
 
 %% ilustracja trajektorii w przestrzeni stanow
 clf; hold on;
@@ -26,6 +42,32 @@ for i=1:T0
     plot(x(1, 1+(i-1)*T:i*T), x(2, 1+(i-1)*T:i*T), '-o');
     plot(x(1, 1+(i-1)*T), x(2, 1+(i-1)*T), 'ko');
 end;
+
+%% ilustracja obrazu Y = AX0
+
+Ximage = R*exp(1i * (0:pi/100:2*pi)); Ximage = [real(Ximage); imag(Ximage)];
+Yimage = A*X0;
+
+plot(Ximage(1,:), Ximage(2,:), 'Color', 0.75*[0, 1, 0]);
+plot(Yimage(1,:), Yimage(2,:), 'Color', 0.75*[0, 0, 1]);
+
+%% ilustracja wektorow lambda_i, v_i
+
+% wektory uzyte do konstrukcji macierzy A
+lv1 = l1 * v1;
+lv2 = l2 * v2;
+
+plot([0, lv1(1)], [0, lv1(2)], 'r-');
+plot([0, lv2(1)], [0, lv2(2)], 'r-');
+
+% wektory uzyskane przez matlaba
+%kierunki wektorow pokrywaja sie w obu przypadkach
+leigv1 = D(1, 1) * veig1;
+leigv2 = D(2, 2) * veig2;
+
+plot([0, leigv1(1)], [0, leigv1(2)], 'Color', 0.75*[1, 1, 0]);
+plot([0, leigv2(1)], [0, leigv2(2)], 'Color', 0.75*[1, 1, 0]);
+
 
 %% ilustracja pola wektorowego okreslajacego trajektorie ukladu
 Ad = A - eye(2);
