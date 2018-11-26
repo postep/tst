@@ -1,10 +1,10 @@
 %% Problem dynamiki w przestrzeni fazowej
 clear variables;
 %% konstruowanie macierzy o zadanym widmie
-l1 = 0.7;
-l2 = -0.3;
-v1 = [1, -1]';
-v2 = [-3, 2]';
+l1 = +1i;
+l2 = -1i;
+v1 = [1, 2]';
+v2 = [1, 1]';
 
 v1scaled = v1./sqrt(sum(v1'*v1));
 v2scaled = v2./sqrt(sum(v2'*v2));
@@ -18,11 +18,11 @@ f = @(x) A*x;
 
 %% konstruowanie zbioru punktow X0 rozlozonych na okregu 
 R = 1;
-X0 = R*exp(1i * (0:pi/4:2*pi)); X0 = [real(X0); imag(X0)];
+X0 = R*exp(1i * (0:8*pi/4:2*pi)); X0 = [real(X0); imag(X0)];
 T0 = length(X0);
 
 %% obliczanie trajektorii ukladu dla wybranych punktow poczatkowych
-T = 2;
+T = 200;
 for i=1:T0
     x(:, 1+(i-1)*T) = X0(:, i);
     for t = 1:T, x(:, t+1 + (i-1)*T) = f(x(:, t + (i-1)*T)); end
@@ -45,8 +45,8 @@ end;
 
 %% ilustracja obrazu Y = AX0
 
-Ximage = R*exp(1i * (0:pi/100:2*pi)); Ximage = [real(Ximage); imag(Ximage)];
-Yimage = A*X0;
+%Ximage = R*exp(1i * (0:pi/100:2*pi)); Ximage = [real(Ximage); imag(Ximage)];
+Yimage = A*Ximage;
 
 plot(Ximage(1,:), Ximage(2,:), 'Color', 0.75*[0, 1, 0]);
 plot(Yimage(1,:), Yimage(2,:), 'Color', 0.75*[0, 0, 1]);
@@ -65,8 +65,8 @@ plot([0, lv2(1)], [0, lv2(2)], 'r-');
 leigv1 = D(1, 1) * veig1;
 leigv2 = D(2, 2) * veig2;
 
-plot([0, leigv1(1)], [0, leigv1(2)], 'Color', 0.75*[1, 1, 0]);
-plot([0, leigv2(1)], [0, leigv2(2)], 'Color', 0.75*[1, 1, 0]);
+% plot([0, leigv1(1)], [0, leigv1(2)], 'Color', 0.75*[1, 1, 0]);
+% plot([0, leigv2(1)], [0, leigv2(2)], 'Color', 0.75*[1, 1, 0]);
 
 
 %% ilustracja pola wektorowego okreslajacego trajektorie ukladu

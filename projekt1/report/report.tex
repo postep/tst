@@ -1,0 +1,53 @@
+\documentclass[]{article}
+\usepackage{polski}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{float}
+
+\geometry{legalpaper, margin=0.6in}
+
+%opening
+\title{TST - Projekt 1}
+\author{Jakub Postępski}
+
+\begin{document}
+
+\maketitle
+
+
+\section{Wprowadzenie}
+Przyjmijmy macierz $A_{2x2}$.
+
+Macierz posiada, dla $i = {1, 2}$:
+\begin{itemize}
+	\item wartości własne $\lambda_i$
+	\item wektory własne $\vec{v_i}$ 
+\end{itemize}
+
+W zadaniu interesuje nas dynamika ciągu:
+\[x^{(t)} = A^tx_0 \]
+
+\section{Wartości własne}
+
+Podstawowym i najważniejszym równaniem jest:
+\[ Ax = \lambda x\]
+
+Zbiór rozwiązań to widmo: \[\sigma(A) = \{ \lambda_i \in \  \} \]
+W ten sposób szukamy wartości dla których macierz $A$ zachowa się jak przekształcenie liniowe (skalar). Dla takich wartości macierz tylko powiększa lub zmniejsza zadany wektor, ale nie zależności pomiędzy składowymi wektora. 
+
+Z równania wynika, że wartości własne decydują o tym jakim przekształceniem będzie macierz $A$
+
+\section{Wektory własne}
+Są wektorami rozpinającymi bazę którą tworzy przekształcenie macierzy A. Zestaw takich wektorów nie jest jednoznaczny. Jedną przestrzeń można rozpiąć różnymi zestawami wektorów. 
+
+\section{Konstruowanie macierzy o zadanych parametrach}
+Odpowiedź wynika z:
+\[ AV = VD \]
+
+Dostajemy:
+\[A = VDV^-1\]
+
+
+\end{document}
