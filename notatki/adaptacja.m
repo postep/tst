@@ -1,12 +1,13 @@
 clear variables;
-dt = 1e-3;
+dt = 1e-2;
 a = 1;
 b = 1;
-uc = 1;
-gamma = 1;
+gamma = 0.9;
 
-am = 100;
-bm = 10000;
+am = -90;
+bm = 10;
+
+uc = 100;
 
 time = 0:dt:10;
 
@@ -19,17 +20,17 @@ ym = zeros(size(time));
 
 for t = 2:length(time)
     e = y(t-1)-ym(t-1);
-    theta_1(t) = -gamma*uc(t)*e*dt;
-    theta_2(t) = gamma*e*dt;
-    theta_1(t) = bm/b;
-    theta_2(t) = (am-a)/b;
+    theta_1(t) = -gamma*uc(t)*e * dt;
+    theta_2(t) = gamma*e * dt;
+%     theta_1(t) = bm/b;
+%     theta_2(t) = (am-a)/b;
     u(t) = theta_1(t)*uc(t) - theta_2(t)*y(t-1);
-    y(t) = (-a*y(t-1) + b*u(t))*dt;
-    ym(t) = (-am*ym(t-1) + bm*uc(t))*dt;
+    y(t) = (-a*y(t-1) + b*u(t)) * dt;
+    ym(t) = (-am*ym(t-1) + bm*uc(t)) * dt;
 end
 
-plot(time, y, time, ym);
-legend('Y', 'Ym');
+% plot(time, ym, time, y);
+% legend('Ym', 'Y');
 
-% plot(time, theta_1, time, theta_2, time, (bm/b)*ones(size(time)), time, ((am-a)/b)*ones(size(time)));
-% legend('theta_1', 'theta_2', 'exp_t1', 'exp_t2');
+plot(time, theta_1, time, theta_2, time, (bm/b)*ones(size(time)), time, ((am-a)/b)*ones(size(time)));
+legend('theta_1', 'theta_2', 'exp_t1', 'exp_t2');
