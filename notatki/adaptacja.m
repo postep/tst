@@ -3,7 +3,7 @@ dt = 1e-3;
 a = 2;
 b = 2;
 am = 1;
-bm = 5;
+bm = 11;
 uc = 1;
 gamma = 5000;
 
@@ -20,7 +20,12 @@ Bmd = sysmd.B;
     
 
 u = zeros(size(time));
-uc = uc*ones(size(time));
+uc = uc*ones(1, 2/dt);
+ud = 3*ones(1, 2/dt);
+ ue = -3*ones(1, 2/dt);
+uf = 3*ones(1, 2/dt);
+ug = zeros(1, 2/dt);
+uc = [uc, ud, ue, uf, ug, 0];
 theta_1 = zeros(size(time));
 theta_2 = zeros(size(time));
 y = zeros(size(time));
