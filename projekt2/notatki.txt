@@ -1,0 +1,7 @@
+- nie mozna zaprojektowac biegunow kompensatora dla calego ukladu.
+- zostaje nieskompensowana czesc phi_wx
+- dlaczego place nie zadzialalo do lokowania biegunow regulatora?
+- odsuniecie biegunow od zera przyspiesza regulacje
+- lepiej sie sprawuja bieguny z jak sa po przeciwnej stronie osi
+- dwie wersje regulatora, albo wszystko razem albo dwa uklady odzielnie
+- bieguny blizej kola jednostkowego zachowuja sie lepiej ale uklad jest mniej stabilny
