@@ -1062,8 +1062,7 @@ body .markdown-body
 <li>przy lokowaniu ujemnych biegunów układ obserwatora dużo gorzej reaguje na szumy</li>
 </ul>
 <h2 id="bieguny-obserwatora">Bieguny obserwatora<a class="headerlink" href="#bieguny-obserwatora" title="Permanent link"></a></h2>
-<p>Można stworzyć obserwator złożony z dwuczęściowego (odzielnie obserwujemy macierz <code>Phi</code> i <code>Phi_w</code>). Wtedy nie bierzemy pod uwagę wpływu <code>Phi_xw</code>. Drugą opcją jest zaprojektowanie obserwatora dla całego układu od razu. Wydaje się, że faktycznie daje to mniejsze błędy w sterowaniu.
-- ustawienie ujemnych bieg</p>
+<p>Można stworzyć obserwator złożony z dwuczęściowego (odzielnie obserwujemy macierz <code>Phi</code> i <code>Phi_w</code>). Wtedy nie bierzemy pod uwagę wpływu <code>Phi_xw</code>. Drugą opcją jest zaprojektowanie obserwatora dla całego układu od razu. Wydaje się, że faktycznie daje to mniejsze błędy w sterowaniu.</p>
 <h2 id="bieguny-k_x">Bieguny K_x<a class="headerlink" href="#bieguny-k_x" title="Permanent link"></a></h2>
 <p>Z równania </p>
 <p><code>det(zI - A + BK_x)</code></p>
@@ -1076,16 +1075,18 @@ body .markdown-body
 <p>i podstawieniu </p>
 <p><code>U(t) = -K_x*x(t)-K_w*w(t)</code></p>
 <p>dostajemy:</p>
-<p><code>W(t) = (Phi_xw - Gamma*K_w) ==&gt; Phi_xw = Gamma*k_w</code></p>
-<p>ale wymiary macierzy się nie zgadzają. Żeby znaleźć coś podobnego do odwroności macierzy Gamma zastosowałem pseudoodwrotność.</p>
+<p><code>W(t) = (Phi_xw - Gamma*K_w) ==&gt; K_w = pinv(Gamma)*Phi_xw</code></p>
+<p>ale wymiary macierzy się nie zgadzają. Żeby znaleźć coś podobnego do odwrotności macierzy <code>Gamma</code> zastosowałem pseudoodwrotność.</p>
 <h1 id="sterowanie">Sterowanie<a class="headerlink" href="#sterowanie" title="Permanent link"></a></h1>
 <ul>
-<li>widać wyraźne piki przy zmianie wartości zadanej </li>
+<li>widać wyraźne piki sterowania przy zmianie wartości zadanej </li>
 <li>nie ma eliminacji uchybu statycznego ==&gt; wartość uchybu statycznego zależy od <code>K_c</code></li>
+<li>przy niektórych symulacjach widać jak nieskompensowany szum zaczyna wprowadzać coraz większe oscylacje do obserwatora.</li>
 </ul>
-<h2 id="wartosc-kc">Wartość Kc<a class="headerlink" href="#wartosc-kc" title="Permanent link"></a></h2>
+<h2 id="wartosc-k_c">Wartość K_c<a class="headerlink" href="#wartosc-k_c" title="Permanent link"></a></h2>
 <p>Układ bez sterowania zewnętrznego zbiega do zera. Po dodaniu do sterowania wartości zadanej układ powinien zbiegać do niej. Zależy nam na tym aby w stanie ustalonym (możemy pominąć indeksy czasu i wpływ szumów):</p>
 <p><code>y = C*X = u_c</code></p>
-<p>Po podstawieniu tam gdzie się da <code>u_c=x1=y</code> dostajemy:</p>
-<p><code>u_c = p11*u_c + K_c*u_c^2 - g1*k1*u_c - (p12*u_c*(p21 - g2*k1))/(p22 + K_c*u_c - g2*k2) + (g1*k2*u_c*(p21 - g2*k1))/(p22 + K_c*u_c - g2*k2)</code></p>
-<p>i wtedy możemy wyliczyć <code>K_c</code></p></article></body></html>
+<p>Po podstawieniu tam gdzie się da <code>u_c=y</code> i zastosowaniu macierzy pseudoodwrotnej dostajemy:</p>
+<p><code>K_c = Gamma^-1*[1-Phi+Gamma*K_x]*C^-1</code></p>
+<p>i wtedy możemy wyliczyć <code>K_c</code>, które jednak nie jest jednoznaczne bo <code>K_x</code> jest liniowo zależne.</p>
+<p>Można na to wszystko spojrzeć w przewrotny sposób. Na zwykłą logikę jeśli <code>K_c=1</code> to układ powinien podążać za <code>u_c</code> i dla symulacji faktycznie ma to miejsce. Można odwrócić powyższe równanie i wyliczyć wartości <code>K_x</code>, co w przybliżeniu osiągamy dla <code>k_2 = 0.3235</code>. Przy tak dobranych wartościach szumy są małe i nie zwiększają oscylacji układu w trakcie symulacji. Faktycznie dla tak dobranych wartości układ reguluje się dobrze ale nie wiem czy zastosowana sztuczka ma wogóle znaczenie.</p></article></body></html>

@@ -5,7 +5,6 @@
 
 ## Bieguny obserwatora
 Można stworzyć obserwator złożony z dwuczęściowego (odzielnie obserwujemy macierz ```Phi``` i ```Phi_w```). Wtedy nie bierzemy pod uwagę wpływu ```Phi_xw```. Drugą opcją jest zaprojektowanie obserwatora dla całego układu od razu. Wydaje się, że faktycznie daje to mniejsze błędy w sterowaniu.
-- ustawienie ujemnych bieg
 
 ## Bieguny K_x
 Z równania 
@@ -29,21 +28,24 @@ i podstawieniu
 
 dostajemy:
 
-``` W(t) = (Phi_xw - Gamma*K_w) ==> Phi_xw = Gamma*k_w ```
+``` W(t) = (Phi_xw - Gamma*K_w) ==> K_w = pinv(Gamma)*Phi_xw```
 
-ale wymiary macierzy się nie zgadzają. Żeby znaleźć coś podobnego do odwroności macierzy Gamma zastosowałem pseudoodwrotność.
+ale wymiary macierzy się nie zgadzają. Żeby znaleźć coś podobnego do odwrotności macierzy ```Gamma``` zastosowałem pseudoodwrotność.
 
 # Sterowanie
-- widać wyraźne piki przy zmianie wartości zadanej 
+- widać wyraźne piki sterowania przy zmianie wartości zadanej 
 - nie ma eliminacji uchybu statycznego ==> wartość uchybu statycznego zależy od ```K_c```
+- przy niektórych symulacjach widać jak nieskompensowany szum zaczyna wprowadzać coraz większe oscylacje do obserwatora.
 
-## Wartość Kc
+## Wartość K_c
 Układ bez sterowania zewnętrznego zbiega do zera. Po dodaniu do sterowania wartości zadanej układ powinien zbiegać do niej. Zależy nam na tym aby w stanie ustalonym (możemy pominąć indeksy czasu i wpływ szumów):
 
 ``` y = C*X = u_c```
 
-Po podstawieniu tam gdzie się da ```u_c=x1=y``` dostajemy:
+Po podstawieniu tam gdzie się da ```u_c=y``` i zastosowaniu macierzy pseudoodwrotnej dostajemy:
 
-``` u_c = p11*u_c + K_c*u_c^2 - g1*k1*u_c - (p12*u_c*(p21 - g2*k1))/(p22 + K_c*u_c - g2*k2) + (g1*k2*u_c*(p21 - g2*k1))/(p22 + K_c*u_c - g2*k2)```
+``` K_c = Gamma^-1*[1-Phi+Gamma*K_x]*C^-1```
 
-i wtedy możemy wyliczyć ```K_c```
+i wtedy możemy wyliczyć ```K_c```, które jednak nie jest jednoznaczne bo ```K_x``` jest liniowo zależne.
+
+Można na to wszystko spojrzeć w przewrotny sposób. Na zwykłą logikę jeśli ```K_c=1``` to układ powinien podążać za ```u_c``` i dla symulacji faktycznie ma to miejsce. Można odwrócić powyższe równanie i wyliczyć wartości ```K_x```, co w przybliżeniu osiągamy dla ```k_2 = 0.3235```. Przy tak dobranych wartościach szumy są małe i nie zwiększają oscylacji układu w trakcie symulacji. Faktycznie dla tak dobranych wartości układ reguluje się dobrze ale nie wiem czy zastosowana sztuczka ma wogóle znaczenie.
