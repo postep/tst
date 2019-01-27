@@ -1,0 +1,79 @@
+\documentclass[a4paper]{article}
+\usepackage{polski}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{geometry}
+\usepackage{float}
+
+
+\title{TST - Projekt 2}
+\author{Jakub Postępski}
+
+\begin{document}
+
+\maketitle
+
+
+\section{Bieguny}
+\begin{itemize}
+
+	\item przy lokowaniu biegunów poza układem jednostowym układ "rozjeżdza się".
+	\item zwiększanie odległości od zera lokowanych biegunów minimalnie przyspiesza regulację, ale zwiększa wpływ szumów
+	\item przy lokowaniu ujemnych biegunów układ obserwatora dużo gorzej reaguje na szumy
+\end{itemize}
+
+\subsection{Bieguny obserwatora}
+Można stworzyć obserwator złożony z dwuczęściowego (odzielnie obserwujemy macierz $\Phi$ i $\Phi_w$). Wtedy nie bierzemy pod uwagę wpływu $Phi_{xw}$. Drugą opcją jest zaprojektowanie obserwatora dla całego układu od razu co daje mniejsze błędy estymacji.
+
+\subsection{Bieguny $K_x$}
+Z równania 
+
+\[det(zI - A + BK_x)\]
+
+daje się znaleźć tylko liniową zależność ponieważ:
+
+\[rank(W_c) < rank(\Phi)\] 
+
+więc układ nie jest sterowalny. Ustawienie dużych wartości wektora $K_x$powoduje większe przenoszenie szumów przez większe wartości sterowania.
+
+\subsection{Bieguny $K_w$}
+Po przekształceniu równania 
+
+\[ \hat{x}(x+1) = \Phi x(t) + \Phi_{xw}w(t) + \Gamma u(t) \]
+
+i podstawieniu 
+
+\[ U(t) = -K_xx(t)-K_ww(t) \]
+
+dostajemy:
+
+\[ w(t) = (\Phi_{xw} - \Gamma K_w) \Rightarrow K_w = \Gamma ^{-1} \Phi_{xw}\]
+
+ale wymiary macierzy się nie zgadzają. Żeby znaleźć coś podobnego do odwrotności zastosowałem pseudoodwrotność macierzy.
+
+\section{Sterowanie}
+\begin{itemize}
+\item widać wyraźne piki sterowania przy zmianie wartości zadanej 
+\item nie ma eliminacji uchybu statycznego. Wartość uchybu statycznego zależy od $K_c$
+\item przy niektórych symulacjach widać jak nieskompensowany szum zaczyna wprowadzać coraz większe oscylacje do obserwatora.
+\end{itemize}
+
+\section{Wartość $K_c$}
+Układ bez sterowania zewnętrznego zbiega do zera. Po dodaniu do sterowania wartości zadanej układ powinien zbiegać do niej. Zależy nam na tym aby w stanie ustalonym (możemy pominąć indeksy czasu i wpływ szumów):
+
+\[ y = Cx = u_c\]
+
+Po podstawieniu tam gdzie się da $u_c=y$ i zastosowaniu macierzy pseudoodwrotnej dostajemy:
+
+\[ K_c = \Gamma^{-1} (1-Phi+\Gamma K_x)C^{-1}\]
+
+i wtedy moglibyśmy wyliczyć $K_c$, gdyby nie to, że $K_x$ jest liniowo zależne.
+
+Na zwykłą logikę jeśli $K_c=1$ to układ powinien podążać za $u_c$ i dla symulacji faktycznie ma to miejsce. 
+
+Można na to wszystko spojrzeć w przewrotny sposób. Można odwrócić powyższe równanie i wyliczyć wartości $K_x$, przy założeniu $K_c=1$. Przy tak dobranych wartościach szumy są małe i układ reguluje się dobrze.
+
+\end{document}
