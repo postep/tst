@@ -6,6 +6,7 @@ l2 = -0.6 *rand();
 v1 = [-0.5, 3.3]'; 
 v2 = [1, 5]';
 
+%dfsakfjds
 v1scaled = v1./sqrt(sum(v1'*v1));
 v2scaled = v2./sqrt(sum(v2'*v2));
 
